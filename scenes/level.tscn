@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://blqif0fcfgrx4"]
+
+[ext_resource type="Texture2D" uid="uid://crvcdieao3cj6" path="res://purple.png" id="1_0xn5w"]
+[ext_resource type="Script" path="res://scenes/level.gd" id="1_aujyt"]
+[ext_resource type="PackedScene" uid="uid://i4wgsb44w8c" path="res://scenes/player.tscn" id="2_vwl1k"]
+[ext_resource type="PackedScene" uid="uid://b1u2eogwqjuk3" path="res://scenes/ui.tscn" id="4_yr7bc"]
+[ext_resource type="AudioStream" uid="uid://ciw5lx88r22sp" path="res://audio/sfx_shieldDown.ogg" id="5_vkjb8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f3qu7"]
+size = Vector2(114.5, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iloxn"]
+size = Vector2(1300, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sk5lb"]
+size = Vector2(1283, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sl2jw"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_aujyt")
+
+[node name="BackGround" type="Sprite2D" parent="."]
+position = Vector2(646.5, 369.5)
+scale = Vector2(5.06641, 2.92578)
+texture = ExtResource("1_0xn5w")
+
+[node name="Player" parent="." instance=ExtResource("2_vwl1k")]
+position = Vector2(566, 328)
+
+[node name="Borders" type="Node2D" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D"]
+position = Vector2(1344, 365)
+shape = SubResource("RectangleShape2D_f3qu7")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D2"]
+position = Vector2(631, 750)
+shape = SubResource("RectangleShape2D_iloxn")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D3"]
+position = Vector2(642.5, -31)
+shape = SubResource("RectangleShape2D_sk5lb")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="Borders"]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/StaticBody2D4"]
+position = Vector2(-61, 362)
+shape = SubResource("RectangleShape2D_f3qu7")
+
+[node name="MeteorTimer" type="Timer" parent="." groups=["ui"]]
+wait_time = 0.254
+autostart = true
+
+[node name="Meteors" type="Node2D" parent="."]
+
+[node name="Lasers" type="Node" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_sl2jw")
+
+[node name="UI" parent="." instance=ExtResource("4_yr7bc")]
+
+[node name="HealthLossSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_vkjb8")
+
+[connection signal="laser" from="Player" to="." method="_on_player_laser"]
+[connection signal="timeout" from="MeteorTimer" to="." method="_on_meteor_timer_timeout"]
